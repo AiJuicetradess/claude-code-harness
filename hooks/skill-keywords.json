@@ -1,0 +1,157 @@
+{
+  "skills": [
+    {
+      "name": "systematic-debugging",
+      "keywords": [
+        "debug",
+        "bug",
+        "fix this bug",
+        "broken",
+        "not working",
+        "investigate"
+      ]
+    },
+    {
+      "name": "brainstorming",
+      "keywords": [
+        "build",
+        "create",
+        "new feature",
+        "add feature",
+        "lets make",
+        "let's make",
+        "i want to build"
+      ]
+    },
+    {
+      "name": "git-pushing",
+      "keywords": [
+        "push changes",
+        "commit and push",
+        "push to github",
+        "push this",
+        "push to remote"
+      ]
+    },
+    {
+      "name": "kaizen",
+      "keywords": [
+        "improve",
+        "refactor",
+        "clean up",
+        "code quality",
+        "simplify"
+      ]
+    },
+    {
+      "name": "ui-ux-pro-max",
+      "keywords": [
+        "design",
+        "landing page",
+        "dashboard",
+        "UI",
+        "UX",
+        "frontend design",
+        "glassmorphism",
+        "dark mode"
+      ]
+    },
+    {
+      "name": "prompt-engineering",
+      "keywords": [
+        "improve prompt",
+        "prompt engineering",
+        "image prompt",
+        "video prompt",
+        "midjourney",
+        "flux prompt"
+      ]
+    },
+    {
+      "name": "self-reflection",
+      "keywords": [
+        "reflect",
+        "reflection",
+        "what did i learn",
+        "session review"
+      ]
+    },
+    {
+      "name": "context-management",
+      "keywords": [
+        "context is high",
+        "running out of context",
+        "context management",
+        "context cleanup"
+      ]
+    },
+    {
+      "name": "executing-plans",
+      "keywords": [
+        "execute plan",
+        "implement plan",
+        "follow the plan",
+        "run the plan"
+      ]
+    },
+    {
+      "name": "finishing-a-development-branch",
+      "keywords": [
+        "finish branch",
+        "ready to merge",
+        "implementation complete",
+        "wrap up"
+      ]
+    },
+    {
+      "name": "using-git-worktrees",
+      "keywords": [
+        "worktree",
+        "isolated workspace",
+        "new branch"
+      ]
+    },
+    {
+      "name": "spec-lifecycle",
+      "keywords": [
+        "stale plans",
+        "old plans",
+        "outdated spec",
+        "outdated specs",
+        "retire plan",
+        "retire the plan",
+        "spec sync",
+        "plan cleanup",
+        "clean up plans",
+        "plans on disk",
+        "implemented plans"
+      ]
+    },
+    {
+      "name": "diagram-geometry",
+      "keywords": [
+        "svg diagram",
+        "svg connector",
+        "connectors",
+        "arrow label",
+        "elbow",
+        "attach point",
+        "flowchart svg",
+        "architecture diagram",
+        "sequence diagram",
+        "swimlane"
+      ]
+    },
+    {
+      "name": "archify",
+      "keywords": [
+        "archify",
+        "system map",
+        "architecture map",
+        "visualize the architecture",
+        "data lineage",
+        "state machine diagram"
+      ]
+    }
+  ]
+}

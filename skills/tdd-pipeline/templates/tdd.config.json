@@ -1,0 +1,46 @@
+{
+  "_README": [
+    "tdd-pipeline manifest. Copy to the ROOT of the target PROJECT (or subproject) as 'tdd.config.json'.",
+    "The harness REFUSES to run without this file -- it never guesses the target or the test command.",
+    "For a monorepo, place this at the SUBPROJECT root you want under TDD, NOT the workspace root.",
+    "JSON has no comments -- per-key meaning is in _DOC. Unknown keys are ignored.",
+    "Prefer ARRAY form for commands so args with spaces/backslashes are safe (no shell splitting)."
+  ],
+  "_DOC": {
+    "root": "abs path, or relative-to-this-file; the project root the suite runs in. '.' = this file's dir.",
+    "runner": "pytest | go | jest | make. Only pytest is fully implemented; others are declared seams.",
+    "test_cmd": "ARRAY argv to run the FULL suite, cwd=root. e.g. [\"python\",\"-m\",\"pytest\"].",
+    "smoke_cmd": "ARRAY argv for the E2E smoke gate (the L009 check). null = unit-green only (logged, not silent).",
+    "git_mode": "git | worktree | snapshot. Decides how the regression firewall checkpoints/restores.",
+    "worktree_dir": "if git_mode=worktree, the worktree subdir that is the real git work tree.",
+    "protect": "globs NEVER snapshotted or committed (secrets, artifacts). gitignored paths auto-excluded in git mode.",
+    "contract_source": "path to a Validation Contract doc, or 'tests' to treat the existing suite as the contract.",
+    "test_files_immutable": "true => fixer agents may not edit test files (anti-cheat; green via mutating tests is rejected).",
+    "max_rounds": "hard cap on red->green iterations before surfacing 'blocked'.",
+    "k_no_progress": "halt if the failing-set has not shrunk for this many consecutive rounds (anti-spin).",
+    "flaky_reruns": "on a green->red flip, re-run that test this many times in isolation before trusting the regression.",
+    "state_dir": "where .tdd state/report/snapshots are written (relative to root).",
+    "preflight": "path to swarm-verify preflight.py to compose for ground-truth; null = auto-detect; \"\" = skip."
+  },
+
+  "schema": "tdd-config/v1",
+
+  "root": ".",
+  "runner": "pytest",
+  "test_cmd": ["python", "-m", "pytest"],
+  "smoke_cmd": ["python", "-m", "pytest", "-k", "smoke"],
+
+  "git_mode": "git",
+  "worktree_dir": null,
+  "protect": [".env", ".env.*", "*.key", "*.pem", "secrets/*"],
+
+  "contract_source": "tests",
+  "test_files_immutable": true,
+
+  "max_rounds": 12,
+  "k_no_progress": 2,
+  "flaky_reruns": 3,
+
+  "state_dir": ".tdd",
+  "preflight": null
+}

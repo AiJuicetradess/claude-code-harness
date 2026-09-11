@@ -1,0 +1,49 @@
+# Claude Code harness repo -- SECRETS-SAFE ALLOWLIST.
+#
+# A ~/.claude directory holds OAuth credentials (.credentials.json), session
+# transcripts under projects/ (which can contain pasted secrets), plugin caches,
+# and assorted runtime state. Default-ignore EVERYTHING and opt in only curated,
+# non-secret harness *source*, so this layout is safe even if it is ever used
+# as a live ~/.claude. Never convert this to a denylist.
+
+# 1. Ignore every top-level entry...
+/*
+
+# 2. ...then opt specific harness source back in.
+!/.gitignore
+!/README.md
+!/CLAUDE.md
+!/skills/
+!/hooks/
+!/lessons/
+!/agents/
+!/bin/
+# settings.json is hook wiring + permissions + plugin flags. Constraint: its
+# env block must stay secret-free (use OS env vars, never values here).
+!/settings.json
+# reflections/ mixes source with runtime capture (session-log.jsonl, deltas,
+# backups) -- re-include the dir, then opt in ONLY .py/.md source.
+!/reflections/
+reflections/*
+!reflections/*.py
+!reflections/*.md
+
+# 3. Within allowed trees, track SOURCE only -- never runtime run-artifacts/outputs
+#    (these can capture pasted secrets, e.g. memory-synthesizer/runs/.../agent-outputs).
+skills/**/runs/
+skills/**/agent-outputs/
+skills/**/.cache/
+skills/**/output/
+skills/**/outputs/
+
+# 4. Defense-in-depth: never track secrets/caches even inside allowed trees.
+**/__pycache__/
+**/*.pyc
+**/.pytest_cache/
+**/.env
+**/.env.*
+**/*.key
+**/*.pem
+**/.credentials*
+**/node_modules/
+**/*.log

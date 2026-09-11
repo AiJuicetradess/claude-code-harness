@@ -1,0 +1,50 @@
+{
+  "_README": [
+    "swarm-verify config. Copy this to the ROOT of a swarm/project as 'swarm.config.json'",
+    "to ARM the pre-flight hook for that directory tree. With NO config present at or",
+    "above the cwd, the hook is INERT (prints nothing) -- so installing the toolkit",
+    "globally never disrupts a swarm until you opt that tree in by dropping this file.",
+    "Delete any keys you don't need; preflight.py ignores unknown keys.",
+    "JSON has no comments -- per-key meaning is in _DOC below."
+  ],
+  "_DOC": {
+    "canonical_dir": "abs path; cwd MUST be inside it or it's a violation (wrong-repo guard). null = skip.",
+    "stale_dirs": "dir names that must NOT be the working root (e.g. 'automation'); match => violation.",
+    "require_git": "true => cwd not inside a git repo is a violation.",
+    "target_host": "optional SSH alias to probe for liveness; null = skip.",
+    "host_check_cmd": "command run via ssh on target_host; success => host ok, failure/timeout => UNKNOWN.",
+    "require_host": "true => target_host UNKNOWN becomes a violation.",
+    "clock_bounds_days": "[past, future] day tolerance published as plausible_epoch_bounds for downstream timestamp sanity-checks.",
+    "enforcement": "'warn' (inject advisories, never block) | 'block' (a hard violation blocks the swarm launch).",
+    "state_dir": "where STATE.md / state.json / status.json are written (relative to cwd or absolute).",
+    "ttl_seconds": "snapshot freshness; within TTL the hook reuses the cached snapshot (skips re-probing remote hosts).",
+    "deliverable": "defaults the coordinator passes to verify_deliverable.py (see SKILL.md). Not read by preflight.",
+    "deliverable.max_attempts": "self-heal retry budget per task before quarantine (default 2; nested under 'deliverable'). A task spec may carry its own max_attempts to override."
+  },
+
+  "schema": "swarm-config/v1",
+
+  "canonical_dir": "C:/path/to/your/repo",
+  "stale_dirs": ["automation", "old", "backup", "_archive"],
+  "require_git": true,
+
+  "target_host": null,
+  "host_check_cmd": "systemctl is-active n8n",
+  "require_host": false,
+
+  "clock_bounds_days": [365, 1],
+  "enforcement": "warn",
+  "state_dir": ".swarm",
+  "ttl_seconds": 900,
+
+  "deliverable": {
+    "min_bytes": 20,
+    "required_fields": ["summary"],
+    "provenance_field": "sources",
+    "count_field": null,
+    "min_count": null,
+    "sentinel": "<!-- END:{taskhash} -->",
+    "schema": null,
+    "max_attempts": 2
+  }
+}

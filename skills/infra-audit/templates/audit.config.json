@@ -1,0 +1,52 @@
+{
+  "_README": "infra-audit manifest. Arms ONE box (or subproject) -- copy to the box as audit.config.json and fill box_id, signing.allowed_signers, allowlist, denylist, bounds. With NO manifest the agent REFUSES to run; it never guesses the target, the bounds, or the destructive scope. See ~/.claude/skills/infra-audit/SKILL.md.",
+
+  "_DOC": {
+    "box_class": "operator | client. 'client' forces stricter defaults and is surfaced in the digest. Both boxes are per-action-gated regardless.",
+    "signing.allowed_signers": "Path ON THIS BOX to an ssh allowed_signers file holding ONLY the operator PUBLIC key. The private key stays off-box (hardware token, FIDO sk- key). Verified with: ssh-keygen -Y verify. The agent UID must NOT be able to write this file (root-owned, chattr +i recommended).",
+    "denylist": "NEVER deletable. Two layers: (1) globs match the canonicalized ABSOLUTE real path (so use '*/secrets/*', NOT 'secrets/*' which can never match an absolute path) plus the basename, and any nlink>1 hardlinked target is refused; (2) for (dev,inode) IDENTITY protection against hardlink/bind-mount aliases, ALSO list high-value objects as ABSOLUTE LITERAL paths (e.g. /etc/infra-audit/allowed_signers, /var/lib/app/prod.db) -- only literal existing paths populate the identity set; globs do not.",
+    "allowlist": "The ONLY trees the agent may PROPOSE destructive actions against.",
+    "clock": "plausible_epoch_bounds, reused from swarm-verify. Any epoch outside [floor,ceil] or greater than now+max_skew is SUSPECT (sensor/clock bug), never an ALERT.",
+    "caps": "Sanity ceiling on a single action's blast radius, even though every destructive action is individually signed.",
+    "digest.discord_webhook_env": "NAME of the env var holding the webhook URL. NEVER put the secret URL here (L010 / no hardcoded secrets)."
+  },
+
+  "schema": "audit-config/v1",
+
+  "box_id": "REQUIRED-unique-id-per-box",
+  "box_class": "operator",
+  "state_dir": ".audit",
+
+  "signing": {
+    "allowed_signers": "/etc/infra-audit/allowed_signers",
+    "namespace": "infra-audit-gate"
+  },
+
+  "allowlist": [
+    "/var/log",
+    "/tmp",
+    "/var/cache"
+  ],
+  "denylist": [
+    ".env", ".env.*", "*.key", "*.pem", "*/secrets/*",
+    "/etc/*", "*.db", "*.sqlite", "*.sqlite3"
+  ],
+
+  "caps": { "max_files": 500, "max_bytes": 5368709120 },
+
+  "clock": { "floor_epoch": 1735689600, "ceil_epoch": 1893456000, "max_skew_seconds": 300 },
+
+  "bounds": {
+    "disk_pct": { "min": 0, "max": 100, "alert_above": 90 },
+    "proc_count": { "min": 0, "max": 100000 },
+    "expected_daemons": [],
+    "pnl_abs_max_x_equity": 2.0,
+    "backup_age": { "max_age_hours_alert": 26 }
+  },
+
+  "quarantine": { "dir": ".audit/quarantine", "purge_after_days": 14 },
+
+  "digest": { "discord_webhook_env": "AUDIT_DISCORD_WEBHOOK", "cadence": "daily" },
+
+  "preflight": null
+}

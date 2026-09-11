@@ -1,0 +1,7 @@
+{
+  "_comment": "Maps cwd substrings to domain preflight skills. session-start-cwd-router.sh checks each key as a case-insensitive substring of $CWD; first match wins. Keys use forward slashes; cwd is normalized to forward slashes before matching. Add a new entry per project domain — keep the substring distinctive enough that unrelated dirs don't false-match.",
+  "_example": {
+    "skill": "my-project-preflight",
+    "description": "Example only (keys starting with _ are ignored). Copy this entry, rename the key to a distinctive substring of your project's path, and point it at the preflight skill that should load when a session starts there."
+  }
+}

@@ -1,0 +1,260 @@
+{
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
+    "ARCHIFY_UPDATE_CHECK_DISABLED": "1"
+  },
+  "permissions": {
+    "allow": [
+      "mcp__public__get_quotes",
+      "mcp__public__get_option_expirations",
+      "mcp__public__get_option_chain",
+      "mcp__public__get_option_greeks",
+      "mcp__public__get_price_history"
+    ],
+    "deny": [
+      "mcp__public__place_order",
+      "mcp__public__place_multileg_order",
+      "mcp__public__place_call_credit_spread",
+      "mcp__public__place_call_debit_spread",
+      "mcp__public__place_put_credit_spread",
+      "mcp__public__place_put_debit_spread",
+      "mcp__public__place_short_order",
+      "mcp__public__flatten_and_go_short",
+      "mcp__public__cancel_order",
+      "mcp__public__cancel_and_replace_order",
+      "mcp__public__preflight_order",
+      "mcp__public__preflight_multileg_order",
+      "mcp__public__preflight_call_credit_spread",
+      "mcp__public__preflight_call_debit_spread",
+      "mcp__public__preflight_put_credit_spread",
+      "mcp__public__preflight_put_debit_spread",
+      "mcp__public__preflight_short_order"
+    ],
+    "ask": [
+      "mcp__public__get_option_greek",
+      "mcp__public__get_instrument",
+      "mcp__public__get_all_instruments",
+      "mcp__public__get_accounts",
+      "mcp__public__get_portfolio",
+      "mcp__public__get_history",
+      "mcp__public__get_order",
+      "mcp__public__get_orders",
+      "mcp__public__check_setup"
+    ],
+    "defaultMode": "auto"
+  },
+  "model": "fable",
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/time-inject.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Edit|NotebookEdit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python ~/.claude/hooks/pre_file_guard.py",
+            "timeout": 6
+          }
+        ]
+      },
+      {
+        "matcher": "Bash|PowerShell",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python ~/.claude/hooks/pre_bash_guard.py",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python ~/.claude/hooks/pre_read_guard.py",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "Workflow|TeamCreate",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/swarm-preflight.sh",
+            "timeout": 12
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/session-end-capture.sh"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/session-start-lessons.sh"
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/session-start-cwd-router.sh",
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/session-start-plan-audit.sh",
+            "timeout": 8
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/post-read-tracker.sh",
+            "timeout": 3
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|NotebookEdit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python ~/.claude/hooks/post_edit_track.py",
+            "timeout": 60
+          }
+        ]
+      },
+      {
+        "matcher": "Bash|PowerShell",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/post-bash-verify-tracker.sh",
+            "timeout": 3
+          }
+        ]
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "matcher": "Bash|PowerShell",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/post-bash-failure-release.sh",
+            "timeout": 3
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/stop-verify-reminder.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  },
+  "enabledPlugins": {
+    "asana@claude-plugins-official": false,
+    "atlassian@claude-plugins-official": false,
+    "claude-code-setup@claude-plugins-official": true,
+    "firecrawl@claude-plugins-official": true,
+    "commit-commands@claude-plugins-official": true,
+    "superpowers@claude-plugins-official": true,
+    "vercel@claude-plugins-official": false,
+    "supabase@claude-plugins-official": true,
+    "huggingface-skills@claude-plugins-official": false,
+    "firebase@claude-plugins-official": false,
+    "playwright@claude-plugins-official": true,
+    "frontend-design@claude-plugins-official": true,
+    "context7@claude-plugins-official": true,
+    "code-review@claude-plugins-official": true,
+    "github@claude-plugins-official": true,
+    "code-simplifier@claude-plugins-official": true,
+    "feature-dev@claude-plugins-official": true,
+    "security-guidance@claude-plugins-official": true,
+    "claude-md-management@claude-plugins-official": true,
+    "skill-creator@claude-plugins-official": true,
+    "agent-sdk-dev@claude-plugins-official": false,
+    "explanatory-output-style@claude-plugins-official": false,
+    "greptile@claude-plugins-official": false,
+    "hookify@claude-plugins-official": false,
+    "slack@claude-plugins-official": false,
+    "playground@claude-plugins-official": false,
+    "learning-output-style@claude-plugins-official": false,
+    "stripe@claude-plugins-official": true,
+    "rust-analyzer-lsp@claude-plugins-official": false,
+    "coderabbit@claude-plugins-official": false,
+    "mintlify@claude-plugins-official": false,
+    "railway@claude-plugins-official": false,
+    "adobe-for-creativity@claude-plugins-official": false,
+    "creative-writing-skills@cw": false,
+    "cloudflare@cloudflare": true
+  },
+  "extraKnownMarketplaces": {
+    "cw": {
+      "source": {
+        "source": "github",
+        "repo": "haowjy/creative-writing-skills"
+      }
+    },
+    "cloudflare": {
+      "source": {
+        "source": "github",
+        "repo": "cloudflare/skills"
+      }
+    },
+    "clay-plugins": {
+      "source": {
+        "source": "git",
+        "url": "https://github.com/clay-run/agent-plugins.git"
+      }
+    }
+  },
+  "effortLevel": "xhigh",
+  "autoUpdatesChannel": "latest",
+  "tui": "fullscreen",
+  "autoDreamEnabled": true,
+  "skipDangerousModePermissionPrompt": true,
+  "skipWorkflowUsageWarning": true,
+  "theme": "light-ansi",
+  "switchModelsOnFlag": false,
+  "terminalProgressBarEnabled": true,
+  "remoteControlAtStartup": false,
+  "agentPushNotifEnabled": true,
+  "skipAutoPermissionPrompt": true,
+  "voiceEnabled": true
+}
