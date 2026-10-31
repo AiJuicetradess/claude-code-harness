@@ -6,6 +6,10 @@ a lessons store with a reflection loop, and a set of general-purpose skills.
 Project-specific skills, project history, and personal paths were stripped before
 publishing.
 
+Built and maintained by Warren Burke at [Intelliscripts](https://intelliscripts.org/harness-upgrades?utm_source=github-readme&utm_medium=listing).
+Several of these patterns are also published there as free, paste-ready Harness Upgrades
+that build them on your own Claude Code setup, no email required.
+
 ## Layout
 
 | Path | What it is |
